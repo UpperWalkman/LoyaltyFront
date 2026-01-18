@@ -1,0 +1,63 @@
+<dx-load-panel
+  [visible]="loading"
+  [shading]="true"
+  shadingColor="rgba(0,0,0,0.4)"
+  [showIndicator]="true"
+  [showPane]="true"
+  message="Autenticando..."
+  [closeOnOutsideClick]="false">
+</dx-load-panel>
+
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="card p-4 shadow" style="width: 450px;">
+        <h2 class="text-center mb-4">
+            Bienvenido!!
+        </h2>
+        <dx-form [formData]="formData" #FormData  class="d-flex justify-content-center align-items-center">
+            <dxi-item itemType="group">
+                <dxi-item dataField="email" editorType="dxTextBox" height="90px"
+                [editorOptions]="{ placeholder: 'Correo electrónico' }" [validationRules]="[
+                  { type: 'required', message: 'El email es obligatorio', height: '50px' },
+                  { type: 'email', message: 'Formato de email inválido', height: '50px' },
+                  
+                ]",
+                
+                [isRequired]="true"
+                >
+                <dxo-label [visible]="false"></dxo-label>
+
+            </dxi-item>
+
+            <dxi-item dataField="contrasenia" editorType="dxTextBox"
+                [editorOptions]="{ placeholder: 'Contraseña', mode: 'password' }" [validationRules]="[
+                  { type: 'required', message: 'La contraseña es obligatoria' },
+                  { type: 'stringLength', min: 6, message: 'Mínimo 6 caracteres' }
+                ]"
+                [isRequired]="true">
+                <dxo-label [visible]="false"></dxo-label>
+            </dxi-item>
+            </dxi-item>
+            
+            
+            <dxi-item class="d-flex justify-content-center align-items-center p-3">
+                <dx-button class="btn btn-primary" text="Iniciar sesión" (onClick)="onSubmit($event)" width="300" height="50">
+                </dx-button>
+            </dxi-item>
+
+            
+
+        </dx-form>
+
+        <div class="text-center mt-3">
+            <span >
+                ¿No tienes una cuenta?
+                <a routerLink="/register-client" class="ml-2 text-primary font-weight-bold">Regístrate aquí</a>
+            </span>
+        </div>
+
+    </div>
+
+</div>
+
+
+

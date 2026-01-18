@@ -1,0 +1,78 @@
+.ml-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background-color: #ffe600; // Amarillo Mercado Libre
+  height: 60px;
+  padding: 0 20px;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.ml-left .logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.ml-right {
+  display: flex;
+  align-items: center;
+}
+
+/* Botón DevExtreme */
+::ng-deep .dx-button {
+  font-weight: 600;
+  color: #333;
+}
+
+::ng-deep .dx-button .dx-icon {
+  color: #333;
+}
+
+/* MENÚ DESPLEGABLE */
+.ml-menu {
+  position: absolute;
+  top: 60px;
+  left: 20px;
+
+  background: white;
+  width: 260px;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.ml-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 10px 0;
+}
+
+.ml-menu li {
+  padding: 12px 20px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.ml-menu li:hover {
+  background-color: #f5f5f5;
+}
+
+/* CARRITO */
+.cart-container {
+  position: relative;
+  cursor: pointer;
+}
+
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: #3483fa;
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  padding: 2px 6px;
+}

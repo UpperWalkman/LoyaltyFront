@@ -1,0 +1,22 @@
+<header class="ml-header">
+    <div class="ml-left">
+        <dx-button text="Menú"
+        icon="menu"
+        stylingMode="text"
+        (onClick)="toggleMenu()"></dx-button>
+
+    </div>
+
+    <div class="ml-right">
+        <dx-button text="Carrito ({{ count }})" icon="cart" stylingMode="contained" type="default" (onClick)="Cart()">
+        </dx-button>
+    </div>
+
+</header>
+<div class="ml-menu" *ngIf="menuOpen">
+    <ul>
+        <li (click)="goTo('articles')"> Artículos</li>
+        <li (click)="goTo('store')"> Tienda</li>
+        <li (click)="goTo('client')"> Clientes</li>
+    </ul>
+</div>
