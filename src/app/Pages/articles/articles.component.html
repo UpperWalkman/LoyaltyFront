@@ -1,1 +1,123 @@
-<p>articles works!</p>
+<!--dx-button
+  text="Agregar al carrito"
+  type="success"
+  (onClick)="addToCart(article)">
+</dx-button-->
+
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+
+  <div class="card p-4 shadow" style="width: 90%; height: 100%;">
+    <H2>Agregue articulos aquí</H2>
+    
+    <div>
+      <div class="d-flex justify-content-end align-items-left mb-3">
+    
+        <dx-text-box placeholder="Buscar..." stylingMode="outlined" width="250" style="height: 38px; border-top:0; border-right: 0; border-left: 0; border-bottom: 5px; margin-right: 10px;"
+          (onValueChanged)="DataGridArticles.instance.searchByText($event.value)">
+        </dx-text-box>
+
+        <dx-button text="Agregar Artículo" icon="add" type="default" (onClick)="newButtonArticle()">
+        </dx-button>
+      </div>
+
+        <dx-data-grid id="gridArticulos" [dataSource]="dataSource" [showBorders]="true" style="height: 100%;" #DataGridArticles
+        keyExpr="IdArticulo"
+        (onContentReady)="onGridReady()"
+        >
+        <dxo-grouping [contextMenuEnabled]="true"> </dxo-grouping>
+        <dxo-header-filter [visible]="true"></dxo-header-filter>
+        <dxo-load-panel [enabled]="true" text="Cargando..."></dxo-load-panel>
+
+<dxo-pager [showPageSizeSelector]="true" [showInfo]="true" [allowedPageSizes]="pageSizes"  [showNavigationButtons]="true" [visible]="true" displayMode="adaptive">
+</dxo-pager>
+<dxo-paging [pageSize]="10" [enabled]="true"></dxo-paging>
+
+          <dxi-column dataField="idArticulo" caption="IdArticulo" [visible]="false"></dxi-column>
+          <dxi-column dataField="codigo" caption="Código"></dxi-column>
+          <dxi-column dataField="descripcion" caption="Descripción" ></dxi-column>
+          <dxi-column dataField="precio" caption="Precio" dataType="number" format="currency"></dxi-column>
+          <dxi-column dataField="stock" caption="Stock" dataType="number"></dxi-column>
+          
+
+          <dxi-column
+          cellTemplate="actionCellTemplate"
+          alignment="center"
+          [fixed]="true"
+          fixedPosition="right"
+          width="50">
+          </dxi-column>
+
+          <div *dxTemplate="let data of 'actionCellTemplate'">
+            <dx-drop-down-button [useSelectMode]="false" icon="overflow" [showArrowIcon]="false" [splitButton]="false"
+              height="18px" [dropDownOptions]="{ width: 150 }" stylingMode="text" type="default"
+              (onItemClick)="onItemClick($event, data)" [items]="MenuActions" keyExpr="id" displayExpr="text"
+              [useItemTextAsTitle]="false" (onButtonClick)="onMenuButtonClick($event, data)">
+            </dx-drop-down-button>
+          </div>
+
+        </dx-data-grid>
+      </div>
+        
+  </div>
+
+</div>
+
+<dx-popup
+  [(visible)]="showModal"
+  title="Nuevo Artículo"
+  [width]="700"
+  [height]="'auto'"
+  [showCloseButton]="true"
+  [dragEnabled]="true"
+  [appendTo]="'body'"
+  [overlayZIndex]="9999">
+
+  <div class="p-3">
+    <div class="mb-3">
+      <label for="codigo" class="form-label">Código</label>
+      <dx-text-box id="codigo" [(value)]="currentArticle.codigo" placeholder="Escribe aquí"></dx-text-box>
+    </div>
+  
+    <div class="mb-3">
+      <label for="descripcion" class="form-label">Descripción</label>
+      <dx-text-box id="descripcion" [(value)]="currentArticle.descripcion" placeholder="Escribe aquí"></dx-text-box>
+    </div>
+  
+    <div class="mb-3">
+      <label for="precio" class="form-label">Precio</label>
+      <dx-number-box id="precio" [(value)]="currentArticle.precio" placeholder="Escribe aquí"></dx-number-box>
+    </div>
+  
+    <div class="mb-3">
+      <label for="stock" class="form-label">Stock</label>
+      <dx-number-box id="stock" [(value)]="currentArticle.stock" placeholder="Escribe aquí"></dx-number-box>
+    </div>
+  
+    <dx-file-uploader [(value)]="currentArticle.imagen" selectButtonText="Seleccionar imagen"
+      labelText="Imagen del artículo" accept="image/*" uploadMode="useForm" [multiple]="false" [width]="'100%'"
+      [height]="150">
+    </dx-file-uploader>
+  
+  
+    <div class="d-flex justify-content-end mt-3">
+      <dx-button text="Cancelar" type="default" (onClick)="closeModal()"></dx-button>
+      <dx-button text="Guardar" type="success" (onClick)="saveArticle(currentArticle)" class="ml-2"></dx-button>
+    </div>
+  </div>
+</dx-popup>
+
+<!-- Modal de imagen -->
+<dx-popup
+  [(visible)]="showImageModal"
+  [width]="500"
+  [height]="'auto'"
+  [showCloseButton]="true"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="true"
+  title="Imagen del Artículo">
+
+  <div class="d-flex justify-content-center p-3">
+    <img *ngIf="currentImage" [src]="currentImage" style="max-width: 100%; max-height: 400px;" />
+  </div>
+</dx-popup>
+

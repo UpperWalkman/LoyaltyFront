@@ -6,6 +6,7 @@ import { RegisterClientComponent } from './Pages/register-client/register-client
 import { HomeComponent } from './Pages/home/home.component';
 import { CartComponent } from './Pages/cart/cart.component';
 import { ArticlesComponent } from './Pages/articles/articles.component';
+import { StoreComponent } from './Pages/store/store.component';
 
 const routes: Routes = [{
   path: 'login-form',
@@ -27,6 +28,10 @@ const routes: Routes = [{
       {
         path: 'articles',
         component: ArticlesComponent
+      },
+      {
+        path: 'store',
+        component: StoreComponent
       }]
   }];
 

@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit {
 
   goTo(route: string) {
     this.menuOpen = false
-    this.router.navigate([route]);
+    this.router.navigate([`home/${route}`]);
   }
 
   toggleMenu() {

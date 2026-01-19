@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { Usuario } from './Models/usuario.model';
 import { RegisterUser } from './Models/register.model';
+import { Articles } from 'src/app/Pages/articles/Models/articles.model';
+import { Store } from './Models/store.model';
 
 export interface IUser {
   email: string;
@@ -62,6 +64,63 @@ export class AuthService {
     }
   }
 
+  //#region conexion tiendas
+
+  /** Obtiene todas las tiendas */
+  async getAllStores(): Promise<Store[]> {
+    try {
+      const result = await this.http.get<Store[]>(`${this.baseUrl}/api/tienda/GetAllTiendas`).toPromise(); 
+      return result || [];
+    } catch (error) {
+      console.error('Error fetching stores:', error);
+      return [];
+    }
+  }
+
+  /**Agrego nueva tienda */
+  async newStore(store: Store): Promise<{ isOk: boolean; message: string }> {
+    try {
+      if (!store.sucursal || !store.direccion) {
+        return { isOk: false, message: "Complete todos los campos." };
+      }
+
+      const result = await this.http.post<any>(`${this.baseUrl}/api/tienda/NewTienda`, store).toPromise(); 
+
+      return {
+        isOk: true,
+        message: "Artículo agregado con éxito."
+      };
+      
+    } catch (ex) {
+      console.error(ex);
+      return {
+        isOk: false,
+        message: "No se pudo agregar la tienda"
+      };
+    }
+  }
+
+  /**aqui actualizo datos de la tienda */
+  async updateStore(store: Store): Promise<{ isOk: boolean; message: string }> {
+    try {
+
+      const result = await this.http.post<any>(`${this.baseUrl}/api/tienda/UpdateTienda`, store).toPromise();
+
+      return {
+        isOk: true,
+        message: "Artículo agregado con éxito."
+      };
+      
+    } catch (ex) {
+      console.error(ex);
+      return {
+        isOk: false,
+        message: "No se pudo agregar la tienda"
+      };
+    }
+  }
+  //#endregion
+
   /** Registro de cliente en la base de datos */
   async registerClient(registerUser: RegisterUser): Promise<{ isOk: boolean; message: string }> {
     try {
@@ -91,6 +150,143 @@ export class AuthService {
       };
     }
   }
+
+  async viewImage(idArticulo: number): Promise<string | null> {
+    try {
+      const result = await this.http.get<any>(`${this.baseUrl}/api/articulo/ViewImage/${idArticulo}`).toPromise();
+      return result?.imagenBase64 || null;
+    } catch (error) {
+      console.error('imagen error', error);
+      return null;
+    }
+  }
+
+  /** Obtiene todos los artículos */
+  async getArticles(): Promise<Articles[]> {
+    try {
+      const result = await this.http.get<Articles[]>(`${this.baseUrl}/api/articulo/getAllArticulos`).toPromise();
+      return result || [];
+    } catch (error) {
+      console.error('Error fetching articles:', error);
+      return [];
+    }
+  }
+
+  /** Elimino el articulo */
+  async deleteArticle(idArticulo: number): Promise<{ isOk: boolean; message: string }> {
+    try {
+      const result = await this.http
+        .delete<any>(`${this.baseUrl}/api/articulo/DeleteArticulo/${idArticulo}`)
+        .toPromise();
+      return {
+        isOk: result,
+        message: "Artículo eliminado con éxito."
+      };
+    }
+    catch (ex) {
+      console.error(ex);
+      return {
+        isOk: false,
+        message: "No se pudo eliminar el artículo"
+      };
+    }
+  }
+
+  /** Actualizo el articulo */
+  async updateArticle(article: Articles): Promise<{ isOk: boolean; message: string }> {
+    try {
+      const hasFile = article.imagen && article.imagen.length > 0;
+      
+      let payload: any = {
+        IdArticulo: article.idArticulo,
+        Codigo: article.codigo,
+        Descripcion: article.descripcion,
+        Precio: article.precio,
+        Stock: article.stock,
+        Imagen: null,
+        File: null
+      };
+
+      if (hasFile) {
+        const file = article.imagen[0];
+        payload.Imagen = file.name;
+        payload.File = await this.readFileAsBase64(file);
+      }
+
+      const params = payload;
+
+      const result = await this.http
+        .post<any>(`${this.baseUrl}/api/articulo/UpdateArticulo`, params)
+        .toPromise();
+      
+      return {
+        isOk: result,
+        message: "Artículo actualizado con éxito."
+      };
+    } catch (ex) {
+      console.error(ex);
+      return {
+        isOk: false,
+        message: "No se pudo actualizar el artículo"
+      };
+    }
+  }
+
+  /** Agrego un nuevo articulo */
+  async newArticle(article: Articles): Promise<{ isOk: boolean; message: string }> {
+  try {
+
+    if (!article.imagen || article.imagen.length === 0 ||
+        !article.precio || !article.stock) {
+      return { isOk: false, message: "Complete todos los campos." };
+    }
+
+    const file = article.imagen[0];
+    
+    const base64 = await this.readFileAsBase64(file);
+
+    const payload = {
+      Codigo: article.codigo,
+      Descripcion: article.descripcion,
+      Precio: article.precio,
+      Stock: article.stock,
+      Imagen: file.name,
+      File: base64
+    };
+
+    const result = await this.http
+      .post<any>(`${this.baseUrl}/api/articulo/NewArticulo`, payload)
+      .toPromise();
+
+    return {
+      isOk: true,
+      message: "Artículo agregado con éxito."
+    };
+
+  } catch (ex) {
+    console.error(ex);
+    return {
+      isOk: false,
+      message: "No se pudo agregar el artículo"
+    };
+  }
+}
+
+
+  private readFileAsBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const base64 = (reader.result as string).split(',')[1];
+      resolve(base64);
+    };
+
+    reader.onerror = error => reject(error);
+
+    reader.readAsDataURL(file);
+  });
+}
 
   async createAccount(email: string, password: string) {
     try {
@@ -136,9 +332,7 @@ export class AuthService {
     
     sessionStorage.clear();
     window.location.reload();
-    /*this._user = null;
-    this.lastAuthenticatedPath = '/';
-    this.router.navigate(['/login-form']);*/
+
 
   }
 }

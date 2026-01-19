@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+
+    <div class="card p-4 shadow" style="width: 90%; height: 100%;">
+        <H2>Agregue las tiendas aquí</H2>
+
+        <div>
+            <div class="d-flex justify-content-end align-items-left mb-3">
+
+                <dx-select-box [items]="stores" [(value)]="selectedStoreId" displayExpr="sucursal" valueExpr="idTienda" placeholder="Filtrar por tienda..."
+                    (onValueChanged)="onStoreSelected($event)">
+                </dx-select-box>
+
+
+                <dx-button text="Nueva Tienda" icon="add" type="default" (onClick)="newButtonStore()">
+                </dx-button>
+            </div>
+            <hr>
+            <h3>Articulos dentro de la tienda <strong>{{sucursal}}</strong></h3>
+            
+            <div class="d-flex justify-content-end align-items-left mb-3">
+                <dx-button text="Asigar articulos" icon="add" type="default" (onClick)="newButtonStore()">
+                </dx-button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<dx-popup
+  [(visible)]="showModal"
+  title="Nueva tienda"
+  [width]="700"
+  [height]="'auto'"
+  [showCloseButton]="true"
+  [dragEnabled]="true"
+  [appendTo]="'body'"
+  [overlayZIndex]="9999">
+
+  <div class="p-3">
+    <div class="mb-3">
+      <label for="sucursal" class="form-label">Código</label>
+      <dx-text-box id="sucursal" [(value)]="currentStore.sucursal" placeholder="Escribe aquí"></dx-text-box>
+    </div>
+  
+    <div class="mb-3">
+      <label for="direccion" class="form-label">Descripción</label>
+      <dx-text-box id="direccion" [(value)]="currentStore.direccion" placeholder="Escribe aquí"></dx-text-box>
+    </div>
+  
+    <div class="d-flex justify-content-end mt-3">
+      <dx-button text="Cancelar" type="default" (onClick)="closeModal()"></dx-button>
+      <dx-button text="Guardar" type="success" (onClick)="saveStore(currentStore)" class="ml-2"></dx-button>
+    </div>
+  </div>
+</dx-popup>
