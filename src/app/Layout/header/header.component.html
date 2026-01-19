@@ -4,11 +4,28 @@
         icon="menu"
         stylingMode="text"
         (onClick)="toggleMenu()"></dx-button>
-
+        <dx-button text="Inicio"
+        icon="home"
+        (onClick)="goTo('homestore')"
+        >
+        </dx-button>
     </div>
 
-    <div class="ml-right">
+    <div class="ml-right" >
         <dx-button text="Carrito ({{ count }})" icon="cart" stylingMode="contained" type="default" (onClick)="Cart()">
+        </dx-button>        
+        <dx-button text="{{user}}"
+        [ngClass]="'margin-left: 9px; margin-right: 9px;'"
+        class="backgroun-color: #ffe600"
+        icon="user"
+        >
+        </dx-button>
+        <dx-button text="Salir"
+        [ngClass]="'margin-left: 9px; margin-right: 9px;'"
+        class="backgroun-color: #ffe600"
+        icon="runner"
+        (onClick)="exit()"
+        >
         </dx-button>
     </div>
 
@@ -17,6 +34,6 @@
     <ul>
         <li (click)="goTo('articles')"> Artículos</li>
         <li (click)="goTo('store')"> Tienda</li>
-        <li (click)="goTo('client')"> Clientes</li>
     </ul>
 </div>
+

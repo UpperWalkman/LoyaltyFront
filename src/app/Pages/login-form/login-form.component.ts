@@ -49,7 +49,7 @@ export class LoginFormComponent implements OnInit {
       return;
     }
 
-    this.router.navigate(['/home']);
+    this.router.navigate(['/home/homestore']);
   }
 
 }

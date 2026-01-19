@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CartService } from 'src/app/Pages/cart/cart.service';
+import { AuthService } from 'src/services';
 
 @Component({
   selector: 'app-header',
@@ -10,9 +11,11 @@ import { CartService } from 'src/app/Pages/cart/cart.service';
 export class HeaderComponent implements OnInit {
 
   menuOpen = false;
+  user: string ='';
   constructor(
     private router: Router,
-    private cartService: CartService
+    private cartService: CartService,
+    private authService: AuthService
   ) { }
 
   get count() {
@@ -20,12 +23,13 @@ export class HeaderComponent implements OnInit {
 }
 
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    this.getUserName();
   }
 
   /**Me dirijo a mi carrito */
   Cart() {
-    this.router.navigate(['/cart']);
+    this.router.navigate(['home/cart']);
   }
 
   goTo(route: string) {
@@ -37,4 +41,18 @@ export class HeaderComponent implements OnInit {
     this.menuOpen = !this.menuOpen;
   }
 
+  async getUserName() {
+    const nombre = Number(localStorage.getItem('User'));
+    const result = await this.authService.getClientName(nombre);
+
+    this.user = result[0].nombre;
+  }
+
+  /**Salgo al login */
+  exit() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('User');
+
+    this.router.navigate(['/login-form']);
+  }
 }

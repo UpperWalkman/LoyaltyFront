@@ -1,5 +1,5 @@
 export interface Store {
-    id: number;
+    idTienda: number;
     sucursal: string;
     direccion: string;
 }

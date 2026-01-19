@@ -3,23 +3,72 @@
     <div class="card p-4 shadow" style="width: 90%; height: 100%;">
         <H2>Agregue las tiendas aquí</H2>
 
+        <hr>
+
         <div>
+          <strong><h3>ABC de tiendas</h3></strong>
             <div class="d-flex justify-content-end align-items-left mb-3">
-
-                <dx-select-box [items]="stores" [(value)]="selectedStoreId" displayExpr="sucursal" valueExpr="idTienda" placeholder="Filtrar por tienda..."
+              <div class="col-2">
+                <label for="selectboxes">Filtrar por tienda...</label>
+                <dx-select-box id="selectboxes" [items]="stores" [(value)]="selectedStoreId" displayExpr="sucursal" valueExpr="idTienda" placeholder="Filtrar por tienda..."
                     (onValueChanged)="onStoreSelected($event)">
+                    
                 </dx-select-box>
+              </div>
+                
 
 
-                <dx-button text="Nueva Tienda" icon="add" type="default" (onClick)="newButtonStore()">
+                <dx-button text="Nueva Tienda" icon="add" type="default" style="margin-left: 9px;" (onClick)="newButtonStore()">
+                </dx-button>
+                <dx-button text="Editar Tienda" icon="edit" type="default" style="margin-left: 9px;" (onClick)="updateButtonStore()">
+                </dx-button>
+                <dx-button text="Eliminar Tienda" icon="trash" type="default" style="margin-left: 9px;" (onClick)="deleteButtonStore()">
                 </dx-button>
             </div>
             <hr>
             <h3>Articulos dentro de la tienda <strong>{{sucursal}}</strong></h3>
             
             <div class="d-flex justify-content-end align-items-left mb-3">
-                <dx-button text="Asigar articulos" icon="add" type="default" (onClick)="newButtonStore()">
+                <dx-button text="Asigar articulos" icon="add" type="default" (onClick)="newButtonArticles()">
                 </dx-button>
+            </div>
+            <div>
+              <dx-data-grid id="gridArticulosInStore"
+              [dataSource]="dataSourceArticleInStore" [showBorders]="true" style="height: 100%;" 
+            keyExpr="IdArticulo" #DataGridArticlesInStore
+              >
+              <dxo-grouping [contextMenuEnabled]="true"> </dxo-grouping>
+        <dxo-header-filter [visible]="true"></dxo-header-filter>
+        <dxo-load-panel [enabled]="true" text="Cargando..."></dxo-load-panel>
+
+<dxo-pager [showPageSizeSelector]="true" [showInfo]="true" [allowedPageSizes]="pageSizes"  [showNavigationButtons]="true" [visible]="true" displayMode="adaptive">
+</dxo-pager>
+<dxo-paging [pageSize]="10" [enabled]="true"></dxo-paging>
+
+<dxi-column dataField="idArticulo" caption="IdArticulo" [visible]="false"></dxi-column>
+          <dxi-column dataField="codigo" caption="Código"></dxi-column>
+          <dxi-column dataField="descripcion" caption="Descripción" ></dxi-column>
+          <dxi-column dataField="precio" caption="Precio" dataType="number" format="currency"></dxi-column>
+          <dxi-column dataField="stock" caption="Stock" dataType="number"></dxi-column>
+          
+
+          <dxi-column
+          cellTemplate="actionCellTemplate"
+          alignment="center"
+          [fixed]="true"
+          fixedPosition="right"
+          [visible]="false"
+          width="50">
+          </dxi-column>
+
+          <div *dxTemplate="let data of 'actionCellTemplate'">
+            <dx-drop-down-button [useSelectMode]="false" icon="overflow" [showArrowIcon]="false" [splitButton]="false"
+              height="18px" [dropDownOptions]="{ width: 150 }" stylingMode="text" type="default"
+               keyExpr="id" displayExpr="text"
+              [useItemTextAsTitle]="false" >
+            </dx-drop-down-button>
+          </div>
+              </dx-data-grid>
             </div>
         </div>
     </div>
@@ -49,6 +98,46 @@
     <div class="d-flex justify-content-end mt-3">
       <dx-button text="Cancelar" type="default" (onClick)="closeModal()"></dx-button>
       <dx-button text="Guardar" type="success" (onClick)="saveStore(currentStore)" class="ml-2"></dx-button>
+    </div>
+  </div>
+</dx-popup>
+
+<dx-popup
+  [(visible)]="showModalAddArticles"
+  title="Asignar articulos a tienda"
+  [width]="700"
+  [height]="'auto'"
+  [showCloseButton]="true"
+  [dragEnabled]="true"
+  [appendTo]="'body'"
+  [overlayZIndex]="9999">
+
+  <div class="p-3">
+    <div class="mb-3">
+      <dx-data-grid id="gridArticulosInStore"
+              [dataSource]="dataSourceArticles" [showBorders]="true" style="height: 100%;" 
+            keyExpr="IdArticulo" #DataGridArticles
+              >
+              <dxo-grouping [contextMenuEnabled]="true"> </dxo-grouping>
+        <dxo-header-filter [visible]="true"></dxo-header-filter>
+        <dxo-load-panel [enabled]="true" text="Cargando..."></dxo-load-panel>
+
+<dxo-pager [showPageSizeSelector]="true" [showInfo]="true" [allowedPageSizes]="pageSizes"  [showNavigationButtons]="true" [visible]="true" displayMode="adaptive">
+</dxo-pager>
+<dxo-paging [pageSize]="10" [enabled]="true"></dxo-paging>
+<dxo-selection mode="multiple" [showCheckBoxesMode]="checkBoxesMode" [deferred]="true"  [allowSelectAll]="true"></dxo-selection>
+
+<dxi-column dataField="idArticulo" caption="IdArticulo" [visible]="false"></dxi-column>
+          <dxi-column dataField="codigo" caption="Código"></dxi-column>
+          <dxi-column dataField="descripcion" caption="Descripción" ></dxi-column>
+          <dxi-column dataField="precio" caption="Precio" dataType="number" format="currency"></dxi-column>
+          <dxi-column dataField="stock" caption="Stock" dataType="number"></dxi-column>
+              </dx-data-grid>
+    </div>
+  
+    <div class="d-flex justify-content-end mt-3">
+      <dx-button text="Cancelar" type="default" (onClick)="closeModalArticles()"></dx-button>
+      <dx-button text="Guardar" type="success" (onClick)="saveArticleInStore()" class="ml-2"></dx-button>
     </div>
   </div>
 </dx-popup>

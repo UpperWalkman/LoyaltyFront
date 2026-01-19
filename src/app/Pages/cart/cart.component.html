@@ -1,1 +1,62 @@
-<p>cart works!</p>
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="card p-4 shadow" style="width: 70%; height: 100%;">
+        <div class="cart-container">
+
+  <h2 class="title">Carrito de compras</h2>
+
+  <div >
+
+    <div class="cart-item" *ngFor="let item of items">
+
+
+      <img
+        class="cart-image"
+        [src]="item.imagen"
+        alt="Imagen del artículo"
+      />
+
+      
+      <div class="cart-info">
+        <div class="cart-name">{{ item.descripcion }}</div>
+        <div class="cart-store">{{ item.tienda }}</div>
+
+        <div class="cart-price">
+          {{ item.precio | currency:'MXN' }}
+        </div>
+      </div>
+
+      <div class="cart-subtotal">
+        {{ item.precio * item.cantidad | currency:'MXN' }}
+      </div>
+
+      <dx-button
+        icon="trash"
+        type="danger"
+        stylingMode="text"
+        (onClick)="remove(item.idArticulo)">
+      </dx-button>
+
+    </div>
+
+    <div class="cart-total">
+      <span>Total</span>
+      <span>{{ total | currency:'MXN' }}</span>
+    </div>
+
+    <div class="cart-actions">
+      <dx-button text="Vaciar carrito" type="danger" (onClick)="clear()"></dx-button>
+      <dx-button text="Continuar compra" type="success" (onClick)="saveArticlesInClient()"></dx-button>
+    </div>
+
+  </div>
+
+  <ng-template #emptyCart>
+    <div class="empty-cart">
+      🛒 Tu carrito está vacío
+    </div>
+  </ng-template>
+
+</div>
+
+    </div>
+</div>

@@ -14,6 +14,7 @@ import { CartComponent } from './Pages/cart/cart.component';
 import { ArticlesComponent } from './Pages/articles/articles.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreComponent } from './Pages/store/store.component';
+import { HomeStoreComponent } from './Pages/home-store/home-store.component';
 
 
 
@@ -27,6 +28,7 @@ import { StoreComponent } from './Pages/store/store.component';
     CartComponent,
     ArticlesComponent,
     StoreComponent,
+    HomeStoreComponent,
   ],
   imports: [
     BrowserModule,

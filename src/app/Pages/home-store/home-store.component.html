@@ -1,0 +1,36 @@
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+  <div class="card p-4 shadow" style="width: 90%; height: 100%;">
+    <div class="content">
+
+      <div class="cards-container">
+        <div class="card" *ngFor="let item of articles">
+          
+          <div class="store">
+            {{ item.tienda }}
+          </div>
+
+          <img class="image" [src]="item.imagen" alt="Imagen del artículo" />
+
+          <div class="description">
+            {{ item.descripcion }}
+          </div>
+
+          <div class="price">
+            {{ item.precio | currency:'MXN' }}
+          </div>
+
+          <div class="stock">
+            Stock: {{ item.stock }}
+          </div>
+
+          <div class="">
+            <dx-button text="Agregar al carrito" icon="add" type="sencondary" (onClick)="addCart(item)">
+            </dx-button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

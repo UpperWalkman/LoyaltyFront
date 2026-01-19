@@ -20,6 +20,7 @@ export class CartService {
         this.items = [];
     }
     
+    /**aqui cuento los articulos */
     getCount() {
         return this.items.length;
     }

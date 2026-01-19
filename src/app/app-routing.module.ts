@@ -7,6 +7,7 @@ import { HomeComponent } from './Pages/home/home.component';
 import { CartComponent } from './Pages/cart/cart.component';
 import { ArticlesComponent } from './Pages/articles/articles.component';
 import { StoreComponent } from './Pages/store/store.component';
+import { HomeStoreComponent } from './Pages/home-store/home-store.component';
 
 const routes: Routes = [{
   path: 'login-form',
@@ -24,6 +25,10 @@ const routes: Routes = [{
       {
         path: 'cart',
         component: CartComponent
+      },
+      {
+        path: 'homestore',
+        component: HomeStoreComponent
       },
       {
         path: 'articles',
